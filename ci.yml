@@ -1,0 +1,22 @@
+- hosts: "{{ h }}"
+
+  vars_files:
+    # secrets.yml must define gitlab_private_roken
+    - secrets.yml
+
+  roles:
+    - role: forge_hostname
+    - role: forge_ssl
+    - role: forge_users
+      forge_users_private_token: gitlab_private_token
+      forge_users_list:
+        - jrodrigu
+        - tkarasek
+        - pkivikan
+        - akoskine
+    - role: jenkins
+      jenkins_plugins: [ldap]
+      jenkins_nginx_proxy: yes
+      jenkins_nginx_hostname: "{{ ansible_fqdn }}"
+      tags: app
+
