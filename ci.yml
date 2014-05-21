@@ -11,7 +11,7 @@
     - role: forge_ssl
     # git clone https://git.forgeservicelab.fi/ansible-roles/forge_users.git
     - role: forge_users
-      forge_users_private_token: gitlab_private_token
+      forge_users_private_token: "{{ gitlab_private_token }}"
       forge_users_list:
         - jrodrigu
         - tkarasek
