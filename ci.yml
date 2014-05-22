@@ -17,6 +17,8 @@
         - tkarasek
         - pkivikan
         - akoskine
+    # git clone https://git.forgeservicelab.fi/ansible-roles/timezone.git
+    - role: timezone
     # git clone https://git.forgeservicelab.fi/ansible-roles/jenkins.git
     - role: jenkins
       jenkins_plugins: [ldap]
