@@ -1,0 +1,10 @@
+# forge_ssl
+- src: git+ssh://gitlab@git.forgeservicelab.fi:10022/ansible-roles/forge_ssl.git
+# forge_users
+- src: git+ssh://gitlab@git.forgeservicelab.fi:10022/ansible-roles/forge_users.git
+# jenkins
+- src: git+ssh://gitlab@git.forgeservicelab.fi:10022/ansible-roles/jenkins.git
+# timezone
+- src: git+ssh://gitlab@git.forgeservicelab.fi:10022/ansible-roles/timezone.git
+# forge_jenkins_mods
+- src: git+ssh://gitlab@git.forgeservicelab.fi:10022/ansible-roles/forge_jenkins_mods.git
