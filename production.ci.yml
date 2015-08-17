@@ -1,0 +1,62 @@
+- hosts: "{{ h }}"
+
+  pre_tasks:
+    - hostname:
+        name: ci.forgeservicelab.fi
+
+  vars_files:
+    # secrets.yml must define gitlab_private_token and prod_forge_jenkins_mods_ldap_secret
+    - secrets.yml
+
+  roles:
+    # git clone https://git.forgeservicelab.fi/ansible-roles/forge_ssl.git
+    - role: forge_ssl
+    # git clone https://git.forgeservicelab.fi/ansible-roles/forge_users.git
+    - role: forge_users
+      forge_users_private_token: "{{ gitlab_private_token }}"
+      forge_users_list:
+        - user1
+        - user2
+      tags: users
+    # git clone https://git.forgeservicelab.fi/ansible-roles/jenkins.git
+    - role: jenkins
+      jenkins_plugins:
+        - ldap
+        - robot # Robot framework
+        - selenium # Selenium2 Grid
+        - performance # jmeter performance
+        - any-buildstep
+        - conditional-buildstep
+        - description-setter
+        - envinject
+        - flexible-publish
+        - git-client
+        - git
+        - postbuild-task
+        - jquery
+        - parameterized-trigger
+        - promoted-builds
+        - run-condition
+        - simple-theme-plugin
+        - token-macro
+      jenkins_apt_packages:
+        - ant
+        - unzip
+        - jmeter
+        - git
+        - php-codesniffer
+      jenkins_nginx_proxy: yes
+      jenkins_nginx_hostname: "{{ ansible_fqdn }}"
+      tags: app
+    # git clone https://git.forgeservicelab.fi/ansible-roles/timezone.git
+    - role: timezone
+    # git clone https://git.forgeservicelab.fi/ansible-roles/forge_jenkins_mods.git
+    - role: forge_jenkins_mods
+      forge_jenkins_mods_ldap_secret: "{{ prod_forge_jenkins_mods_ldap_secret }}"
+
+  post_tasks:
+    - name: upgrade CodeSniffer to latest stable
+      shell: pear install PHP_CodeSniffer-stable
+      register: output
+      failed_when: output.rc != 0 and "is already installed" not in output.stdout
+      changed_when: output.rc == 0
